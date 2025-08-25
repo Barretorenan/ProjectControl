@@ -1,1 +1,109 @@
+## Visão Geral
+- Objetivo: Criar um programa para gerenciamento de projetos e prototipagem de telas com fluxo entre páginas.
+- Público-alvo: Product designers, POs, analistas de negócios e times de desenvolvimento.
+- Resultado esperado: Ferramenta que permita criar projetos, montar fluxos (user flow), prototipar telas com elementos comuns de UI via drag-and-drop e configurar navegação entre páginas.
 
+## Etapa 1 — Descoberta e requisitos
+1. Levantar casos de uso (gerenciamento de projetos, prototipagem, mapeamento de fluxo).
+2. Definir perfis de usuário e permissões (admin, editor, visualizador).
+3. Mínimo Produto Viável (MVP):
+   - Projeto com quadros/páginas
+   - Biblioteca de componentes UI básicos
+   - Canvas de prototipagem com drag-and-drop
+   - Conexões de navegação entre páginas por eventos (ex.: clique)
+   - Salvar/carregar projeto
+4. Requisitos não funcionais: desempenho do canvas, colaboração futura, portabilidade de arquivo, acessibilidade, i18n.
+
+## Etapa 2 — Arquitetura e tecnologia
+1. Cliente: SPA (React/Vue/Svelte) com TypeScript.
+2. Renderização do canvas: HTML5 Canvas, SVG, ou DOM absoluto; avaliar libs (Konva, Fabric.js) ou custom.
+3. Estado: Redux/Zustand/Recoil; modelo normalizado para nós, arestas, páginas e componentes.
+4. Backend: Node.js (Nest/Express) com REST/GraphQL; persistência em PostgreSQL + Prisma.
+5. Armazenamento de arquivos: JSON do projeto (export/import) e histórico de versões.
+6. Infra: Docker, CI, testes (unitários e e2e), feature flags.
+
+## Etapa 3 — Modelagem de domínio
+1. Entidades principais:
+   - Projeto(id, nome, descrição, owner, createdAt, updatedAt)
+   - Página(id, projetoId, nome, largura, altura, ordem)
+   - Componente(id, páginaId, tipo, props, posição{x,y}, dimensão{w,h}, eventos[])
+   - Fluxo(id, origem{páginaId, componenteId?}, destino{páginaId}, gatilho{evento})
+   - Biblioteca(tipo, propriedadesSuportadas, ícone)
+2. Eventos padrão: onClick, onChange, onSubmit, onNavigate.
+3. Restrições: integridade referencial entre fluxos e páginas; validação de props por tipo.
+
+## Etapa 4 — Design de UX/UI
+1. Layout principal: barra lateral (biblioteca), canvas central, painel de propriedades, topo com barra de projeto.
+2. Interações-chave:
+   - Drag-and-drop da biblioteca para canvas
+   - Seleção múltipla, alinhamento, snap-to-grid, zoom/pan
+   - Menu de contexto (duplicar, agrupar, bloquear)
+   - Editor de propriedades (texto, cores, estados, binds)
+   - Conectar fluxo: modo "link" entre origem (componente/evento) e destino (página)
+3. Componentes de UI na biblioteca (MVP):
+   - Estrutura: Frame, Container, Section, Grid
+   - Entrada de dados: Button, Input, TextArea, Checkbox, Radio, Select, Switch, Slider
+   - Exibição: Text, Heading, Image, Icon, Badge, Tag, Avatar
+   - Feedback: Alert, Toast (simulado), Modal (mock)
+   - Navegação: Link, Tabs (simples), Breadcrumb (mock)
+4. Acessibilidade: navegação por teclado no canvas, ARIA nos componentes, contraste mínimo.
+
+## Etapa 5 — Canvas e manipulação
+1. Grid, rulers e snapping configuráveis; guias inteligentes.
+2. Seleção, arraste, redimensionamento, rotação (handles), Z-index, agrupar/deg agrupar.
+3. Alinhamento e distribuição; copiar/colar; histórico (undo/redo) com limite e compressão.
+4. Zoom/pan com wheel + atalhos; performance com virtualização.
+
+## Etapa 6 — Motor de componentes
+1. Definir contrato `IComponent` (tipo, propsSchema, render, hitbox, eventos).
+2. Registro dinâmico de componentes e seus schemas de propriedades (JSON Schema).
+3. Sistema de constraints/layout (absoluto no MVP; auto-layout em fase futura).
+4. Renderização responsiva por breakpoint simples (MVP: desktop; futuro: mobile/tablet).
+
+## Etapa 7 — Fluxos e navegação
+1. Criar modo de ligação: selecionar componente->evento e escolher página destino.
+2. Visualizar grafo de navegação entre páginas (mini-mapa/diagrama).
+3. Simulador de protótipo: "Play" para navegar como usuário final.
+4. Validações: impedir loops inválidos, avisar destinos inexistentes, destaque de ligações quebradas.
+
+## Etapa 8 — Persistência e versão
+1. Modelo JSON do projeto com migrações de versão.
+2. CRUD de projetos e páginas; autosave e checkpoint manual.
+3. Export/Import de arquivos .protojson (exemplo) e thumbnails das páginas.
+4. Versionamento básico e rollback por checkpoint.
+
+## Etapa 9 — Colaboração (futuro próximo)
+1. Presence e cursores em tempo real (WebSocket/WebRTC + CRDT/Yjs).
+2. Comentários ancorados no canvas e revisão.
+3. Compartilhamento com permissões e links de visualização.
+
+## Etapa 10 — Qualidade e testes
+1. Unitários para motor de componentes, seleções e transformações.
+2. e2e para fluxos críticos (criar página, arrastar componente, ligar fluxo, simular).
+3. Testes de performance do canvas; testes de acessibilidade (axe) e teclado.
+
+## Etapa 11 — Entregas incrementais (roadmap)
+- v0.1: Canvas c/ drag-and-drop, biblioteca mínima, salvar/carregar local.
+- v0.2: Ligações de fluxo entre páginas e simulação básica.
+- v0.3: Editor de propriedades completo e histórico undo/redo.
+- v0.4: Backend com autenticação simples e projetos multi-dispositivo.
+- v0.5: Export/Import e mini-mapa de navegação.
+- v0.6+: Colaboração em tempo real, comentários, versões avançadas.
+
+## Etapa 12 — Riscos e mitigações
+- Performance do canvas: usar batching, debouncing, virtualização e profiles.
+- Complexidade de estado: normalizar, dividir por domínios e usar selectors memorizados.
+- Adoção do usuário: templates de páginas e onboarding guiado.
+- Vendor lock-in: formatos abertos (JSON), camadas de abstração para render.
+
+## Etapa 13 — Métricas de sucesso
+- Tempo para criar um protótipo navegável (<30 min).
+- FPS médio no canvas (>50) em protótipos médios.
+- Erros por sessão (<1) e taxa de conclusão de tarefas (>80%).
+- NPS e retenção mensal.
+
+## Etapa 14 — Próximos passos práticos
+1. Validar MVP com 3-5 usuários alvo.
+2. Escolher stack (ex.: React + Zustand + Konva + Nest + Prisma).
+3. Criar repositório, scaffolds (frontend/backend) e CI mínima.
+4. Implementar v0.1 end-to-end e coletar feedback.
