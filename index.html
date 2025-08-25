@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerenciador de Projetos e Prototipagem</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="project-title" id="projectTitle" title="Clique para renomear">Projeto sem título</div>
+      <div class="header-actions">
+        <button id="btnPreview" aria-pressed="false" title="Alternar visualização de protótipo (desabilita edição)">Pré-visualizar</button>
+        <button id="btnNewPage">Nova página</button>
+        <button id="btnExport">Exportar</button>
+        <label class="btn-import">
+          <input type="file" id="fileImport" accept="application/json" hidden>
+          <span>Importar</span>
+        </label>
+        <button id="btnFlowMap" aria-pressed="false" title="Exibir mapa de fluxo entre páginas">Mapa de fluxo</button>
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <aside class="left-panel">
+        <section class="palette">
+          <h3>Elementos</h3>
+          <div class="palette-items" id="paletteItems">
+            <!-- itens gerados via JS -->
+          </div>
+        </section>
+        <section class="pages">
+          <div class="pages-header">
+            <h3>Páginas</h3>
+            <button id="btnAddPageSmall" title="Nova página">+</button>
+          </div>
+          <ul id="pagesList" class="pages-list"></ul>
+        </section>
+      </aside>
+
+      <main class="canvas-wrap">
+        <div id="canvas" class="canvas" tabindex="0">
+          <!-- elementos renderizados via JS -->
+        </div>
+        <div id="flowOverlay" class="flow-overlay" hidden>
+          <svg id="flowSvg" class="flow-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+          <button id="btnCloseFlow" class="close-flow" title="Fechar mapa">×</button>
+        </div>
+      </main>
+
+      <aside class="inspector" id="inspector">
+        <h3>Inspector</h3>
+        <div id="inspectorBody" class="inspector-body">
+          <p>Nenhum elemento selecionado.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="status-bar" id="statusBar">
+      <span>Dica: Arraste itens da paleta para a área central. Use Pré-visualizar para navegar pelos links.</span>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+  </html>
+

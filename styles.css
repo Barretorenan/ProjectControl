@@ -1,0 +1,123 @@
+:root {
+  --bg: #0b0f14;
+  --bg-panel: #121923;
+  --bg-subtle: #0f141b;
+  --text: #e6edf3;
+  --muted: #9fb1c5;
+  --border: #223349;
+  --accent: #3aa8ff;
+  --accent-2: #7bdba3;
+  --danger: #ff5c7a;
+  --warning: #ffd35c;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+.project-title {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.project-title:hover {
+  background: var(--bg-subtle);
+}
+.header-actions { display: flex; gap: 8px; align-items: center; }
+button, .btn-import span {
+  background: #17202b;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+button:hover, .btn-import span:hover { border-color: var(--accent); }
+.btn-import span { display: inline-block; }
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  grid-template-rows: 1fr;
+  height: calc(100% - 56px);
+}
+
+.left-panel {
+  border-right: 1px solid var(--border);
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+}
+.palette { padding: 12px; border-bottom: 1px solid var(--border); }
+.palette-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.palette-item { padding: 10px; background: var(--bg-subtle); border: 1px dashed var(--border); border-radius: 8px; text-align: center; cursor: grab; user-select: none; }
+.palette-item:active { cursor: grabbing; }
+
+.pages { padding: 12px; overflow: auto; }
+.pages-header { display: flex; align-items: center; justify-content: space-between; }
+.pages-list { list-style: none; margin: 8px 0 0 0; padding: 0; display: grid; gap: 6px; }
+.page-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+.page-item button { padding: 4px 6px; }
+.page-item.active { border-color: var(--accent); }
+
+.canvas-wrap { position: relative; }
+.canvas {
+  height: 100%;
+  background: repeating-conic-gradient(from 0deg, #0e141c 0% 25%, #0c1118 0% 50%);
+  background-size: 20px 20px;
+  position: relative;
+  overflow: auto;
+}
+.canvas .element {
+  position: absolute;
+  border: 1px solid var(--border);
+  background: #141b24;
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-width: 60px;
+  min-height: 32px;
+  user-select: none;
+}
+.element.selected { outline: 2px solid var(--accent); }
+.element .resize-handle {
+  position: absolute;
+  width: 10px; height: 10px;
+  right: -5px; bottom: -5px;
+  background: var(--accent);
+  border-radius: 2px;
+  cursor: se-resize;
+}
+
+.inspector { border-left: 1px solid var(--border); background: var(--bg-panel); padding: 12px; overflow: auto; }
+.inspector label { display: block; color: var(--muted); font-size: 12px; margin-top: 8px; }
+.inspector input, .inspector select, .inspector textarea {
+  width: 100%; padding: 8px; background: #0d141c; border: 1px solid var(--border); border-radius: 6px; color: var(--text);
+}
+.inspector .row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+.status-bar { padding: 8px 12px; border-top: 1px solid var(--border); background: var(--bg-panel); color: var(--muted); font-size: 12px; }
+
+.flow-overlay { position: absolute; inset: 0; background: rgba(10, 14, 20, 0.9); display: grid; }
+.flow-svg { width: 100%; height: 100%; }
+.close-flow { position: absolute; top: 10px; right: 10px; z-index: 10; }
+
+.link-target-hint { outline: 2px dashed var(--warning); }
+
+.preview-mode .element { pointer-events: auto; cursor: pointer; }
+.preview-mode .element.draggable { cursor: default; }
+.preview-mode .element .resize-handle { display: none; }
